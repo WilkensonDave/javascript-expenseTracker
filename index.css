@@ -1,0 +1,76 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    margin: 80px auto;
+    max-width: 800px;
+    background-color: #0f4c5c;
+    padding: 20px;
+    border-radius: 4px;
+    color: white;
+}
+
+h1{
+    text-align: center;
+   
+}
+form{
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+form input, form select, form button{
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#btn{
+    background-color: #e36414;
+    color: white;
+    font-size: 18px;
+}
+
+
+.expense-table table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.expense-table th, .expense-table td{
+    text-align: left;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.expense-table th{
+    padding: 10px;
+}
+
+.total-amount{
+    text-align: right;
+    font-size: 22px;
+    color: white;
+}
+
+#expense-filter{
+    text-align: right;
+    margin: 20px 0;
+}
+
+.expense-filter label{
+    margin-right: 10px;
+}
+
+.expense-filter select{
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
