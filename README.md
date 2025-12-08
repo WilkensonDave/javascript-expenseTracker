@@ -11,5 +11,7 @@
 
     This was a great project overall and I learned a lot of things.
 
+# For version 1.01 i added the locale storage functionalities so when the page reloaded the data does not get loss. And i also save the data in the local storage.
+
 
 Version 1.01
