@@ -1,98 +1,111 @@
-document.addEventListener("DOMContentLoaded", (event) =>{
+"use strict"
 
+document.addEventListener("DOMContentLoaded", (e)=>{
+    
+    const expenseContainer = document.getElementById("expense-list");
+    const totalExpend = document.getElementById("total-expense");
+    const filterCategory = document.getElementById("filter-category");
+    const btnAddExpense = document.getElementById("btn");
+    const selectCategory = document.getElementById("expense-category");
     const expenseForm = document.getElementById("expense-form");
-    const ExpensesFilter = document.getElementById("filter-category")
-    const tableBody = document.getElementById("expense-list");
-    const totalExpense = document.getElementById("total-expense");
 
-    let allExpenses = [];
-    expenseForm.addEventListener("submit", (e)=>{
-        e.preventDefault();
-        const name = document.getElementById("expense-name").value;
-        const amount = Number(document.getElementById("expense-amount").value);
-        const category = document.getElementById("expense-category").value;
-        const date = document.getElementById("expense-date").value;
+    let allExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
-        let expense = {
-            id:Date.now(),
-            name,
-            amount,
-            category,
-            date
-        };
-
-        allExpenses.push(expense);
-        displayExpenses(allExpenses);
-        calculateTotal(allExpenses);
-        expenseForm.reset();
-    });
+    function saveData(allExpenses){
+        localStorage.setItem("expenses", JSON.stringify(allExpenses));
+    }
 
 
-    const displayExpenses = function(expenses){
-            tableBody.innerHTML = "";
-            expenses.forEach((expense) =>{
-                const tableRow = document.createElement("tr");
-                tableRow.innerHTML = `
-                <td>${expense.name}</td>
-                <td>${expense.amount.toFixed(2)}</td>
-                <td>${expense.category}</td>
-                <td>${expense.date}</td>
-                <td>
-                    <button class="edit--btn" data-id="${expense.id}">Edit</button>
-                    <button class="delete--btn" data-id="${expense.id}">Delete</button>
-                </td>
-                `;
-                tableBody.appendChild(tableRow);
-            });
-    };
-
-    const calculateTotal = function(expenses){
-        const total = expenses.reduce((acc, expense) => acc + expense.amount, 0);
-        totalExpense.textContent = total.toFixed(2);
-    };
-
-    function updateExpenses(){
-        tableBody.addEventListener("click", (e)=>{
-            const id = parseInt(e.target.dataset.id);
-            const expense = allExpenses.find(expense => expense.id === id);
-            
-            if(e.target.classList.contains("edit--btn")){
-                document.getElementById("expense-name").value = expense.name;
-                document.getElementById("expense-amount").value = expense.amount;
-                document.getElementById("expense-category").value = expense.category;
-                document.getElementById("expense-date").value = expense.date;
-
-                allExpenses = allExpenses.filter(expense => expense.id !== id);
-                displayExpenses(allExpenses);
-                calculateTotal(allExpenses);
-            };
-
-            if(e.target.classList.contains("delete--btn")){
-                allExpenses = allExpenses.filter(expense => expense.id !== id);
-                displayExpenses(allExpenses);
-                calculateTotal(allExpenses);
-            };
+    function displayExpenses(allExpenses){
+        expenseContainer.innerHTML = "";
+        allExpenses.forEach((expense) =>{
+            const tableRow = document.createElement("tr");
+            tableRow.innerHTML =`
+            <td>${expense.expenseName}</td>
+            <td>${expense.expenseAmount}</td>
+            <td>${expense.expenseCategory}</td>
+            <td>${expense.expenseDate}</td>
+            <td>
+            <button class="edit--btn" data-id="${expense.id}">Edit</button>
+            <button class="delete--btn" data-id="${expense.id}">Delete</button>
+            </td>
+            `;
+            expenseContainer.appendChild(tableRow);
         });
-    };
+    }
 
-    updateExpenses();
+    function calculateTotalExpense(allExpenses){
+            const total = allExpenses.reduce((
+            acc, expense) => acc + expense.expenseAmount, 0);
+            totalExpend.textContent = total.toFixed(2);
+    }
 
-    function filterExpenseByCategory(){
-        ExpensesFilter.addEventListener("change", (e)=>{
-            const category = ExpensesFilter.value;
-            const filteredItems = allExpenses.filter(expense => expense.category === category);
+    displayExpenses(allExpenses);
+    calculateTotalExpense(allExpenses);
+
+    expenseForm.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    const expenseName = document.getElementById("expense-name").value;
+    const expenseAmount = parseInt(document.getElementById("expense-amount").value);
+    const expenseCategory = document.getElementById("expense-category").value;
+    const expenseDate = document.getElementById("expense-date").value;
+
+    let expense ={
+        id:Date.now(),
+        expenseName,
+        expenseAmount,
+        expenseCategory,
+        expenseDate
+    }
+
+    allExpenses.push(expense);
+    displayExpenses(allExpenses);
+    calculateTotalExpense(allExpenses);
+    filteredExpenseByCategory(allExpenses);
+    saveData(allExpenses);
+    expenseForm.reset();
+    });
+    
+    expenseContainer.addEventListener("click", (e)=>{
+        e.preventDefault();
+        const id = Number(e.target.dataset.id);
+        const expense = allExpenses.find(expense => expense.id === id);
+        if(e.target.classList.contains("delete--btn")){
+            allExpenses = allExpenses.filter(
+            expense => expense.id !== id);
+            saveData(allExpenses);
+            displayExpenses(allExpenses);
+            calculateTotalExpense(allExpenses);
+        }
+
+        if (e.target.classList.contains("edit--btn")){
+            document.getElementById("expense-name").value = expense.expenseName;
+            document.getElementById("expense-amount").value = expense.expenseAmount;
+            document.getElementById("expense-category").value = expense.expenseCategory;
+            document.getElementById("expense-date").value = expense.expenseDate;
+
+            allExpenses = allExpenses.filter((expense) => expense.id !== id);
+            saveData(allExpenses);
+            displayExpenses(allExpenses);
+            calculateTotalExpense(allExpenses);
+            
+        }
+    });
+        
+    function filteredExpenseByCategory(allExpenses){
+        filterCategory.addEventListener("change", (e)=>{
+            const category = document.getElementById("filter-category").value;
             if(category === "All"){
                 displayExpenses(allExpenses);
-                calculateTotal(allExpenses);
+                calculateTotalExpense(allExpenses);
             }else{
-                displayExpenses(filteredItems);
-                calculateTotal(filteredItems);
-            };
-            
+                const expenseCategory = allExpenses.filter(
+                (expense) => expense.expenseCategory === category);
+                displayExpenses(expenseCategory);
+                calculateTotalExpense(expenseCategory);
+            }
         });
-    };
-
-    filterExpenseByCategory();
+    }
 });
 
 
