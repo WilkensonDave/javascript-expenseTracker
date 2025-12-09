@@ -13,5 +13,5 @@
 
 # For version 1.01 i added the locale storage functionalities so when the page reloaded the data does not get loss. And i also save the data in the local storage.
 
-
-Version 1.01
+# In this version of the project the media queries have been added so the page can be responsive on mobile
+Version 1.1

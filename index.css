@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+body{
+    overflow-x: hidden;
+}
+
 .container{
     display: flex;
     flex-direction: column;
@@ -38,19 +42,18 @@ form input, form select, form button{
 }
 
 
-.expense-table table{
+table{
     width: 100%;
-    border-collapse: collapse;
     margin-bottom: 20px;
 }
 
-.expense-table th, .expense-table td{
-    text-align: left;
+th, td{
+    text-align: center;
     padding: 10px;
     border: 1px solid #ccc;
 }
 
-.expense-table th{
+th{
     padding: 10px;
 }
 
@@ -74,3 +77,44 @@ form input, form select, form button{
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+/*************************MEDIA QUERIES*************************************/
+
+@media (max-width: 600px) {
+  .container{
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  form{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    margin: 20px 20px;
+    justify-content: center;
+    text-align: center;
+    
+  }
+
+  table{
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  td, th{
+    padding: 8px;
+    word-wrap: break-word;
+    white-space: normal;
+    font-size: 14px;
+  }
+}
+
+@media (max-width:400px) {
+    th, td{
+        font-size: 12px;
+        padding: 4px;
+        border: 1px solid;
+    }
+}
+
